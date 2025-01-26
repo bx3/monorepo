@@ -1008,7 +1008,9 @@ impl<
         self.broadcast_messages
             .get_or_create(&metrics::NULLIFY)
             .inc();
-        debug!(view = self.view, "broadcasted nullify");
+        debug!(view = self.view, "broadcasted nullify and use automaton");
+
+        self.automaton.nullify(self.view).await;
     }
 
     async fn nullify(&mut self, sender: &PublicKey, nullify: wire::Nullify) {
@@ -1895,7 +1897,7 @@ impl<
                 proposal,
                 &notarization.proposal_signature,
                 &notarization.seed_signature,
-            );
+            );            
             self.committer
                 .prepared(
                     proof,

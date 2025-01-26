@@ -43,6 +43,12 @@ pub trait Automaton: Clone + Send + 'static {
         context: Self::Context,
         payload: Digest,
     ) -> impl Future<Output = oneshot::Receiver<bool>> + Send;
+
+    /// Notify that consensus is nullifying
+    /// 
+    /// It is an additional signal exposed by consensus to inform the application that the specified
+    /// view could have experienced a nullification.
+    fn nullify(&mut self, view: u64) -> impl Future<Output = ()> + Send;
 }
 
 /// Relay is the interface responsible for broadcasting payloads to the network.

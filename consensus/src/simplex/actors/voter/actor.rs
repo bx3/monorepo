@@ -775,7 +775,9 @@ impl<
         self.broadcast_messages
             .get_or_create(&metrics::NULLIFY)
             .inc();
-        debug!(view = self.view, "broadcasted nullify");
+        debug!(view = self.view, "broadcasted nullify and use automaton");
+
+        self.automaton.nullify(self.view).await;
     }
 
     async fn nullify(&mut self, nullify: wire::Nullify) {
